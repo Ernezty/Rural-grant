@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rural Grants Nigeria</title>
+  <meta name="description" content="Find and apply for grants that support farmers, small businesses and communities in rural Nigeria.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <strong>Rural Grants Nigeria</strong>
+    <nav>
+      <a href="#grants">Grants</a>
+      <a href="#apply">Apply</a>
+      <a href="#help">Help</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Funding for farmers, traders and communities</h1>
+      <p>Browse open grants, then apply from your phone. No account needed.</p>
+      <a class="btn" href="#grants">See open grants</a>
+    </section>
+
+    <section id="grants">
+      <h2>Open grants</h2>
+      <div class="filters">
+        <label>State
+          <select id="filter-state"><option value="">All states</option></select>
+        </label>
+        <label>Type
+          <select id="filter-category">
+            <option value="">All types</option>
+            <option>Farming</option>
+            <option>Small business</option>
+            <option>Education</option>
+            <option>Community</option>
+          </select>
+        </label>
+      </div>
+      <p id="status" role="status">Loading grants...</p>
+      <div id="grant-list"></div>
+    </section>
+
+    <section id="apply">
+      <h2>Apply</h2>
+      <form id="apply-form">
+        <label>Full name
+          <input name="full_name" required maxlength="100" autocomplete="name">
+        </label>
+        <label>Phone number
+          <input name="phone" type="tel" required maxlength="20" autocomplete="tel" placeholder="0803 000 0000">
+        </label>
+        <label>State
+          <select name="state" id="form-state" required><option value="">Choose state</option></select>
+        </label>
+        <label>Local government area (LGA)
+          <input name="lga" required maxlength="100">
+        </label>
+        <label>Grant you are applying for
+          <select name="grant_title" id="form-grant" required><option value="">Choose a grant</option></select>
+        </label>
+        <label>Tell us how the money will be used
+          <textarea name="message" rows="5" required maxlength="1500"></textarea>
+        </label>
+        <button class="btn" type="submit">Submit application</button>
+        <p id="form-msg" role="status"></p>
+      </form>
+    </section>
+
+    <section id="help">
+      <h2>Need help?</h2>
+      <p>Visit your nearest local government office or community leader if you need help filling this form.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Sample content. Replace with your organisation's details.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
