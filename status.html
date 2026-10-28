@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check my application - Rural Grants Nigeria</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <strong>Rural Grants Nigeria</strong>
+    <nav><a href="index.html">Home</a></nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Check my application</h2>
+      <p class="notice">We will never ask you to pay money to receive a grant.</p>
+      <form id="status-form">
+        <label>Phone number you applied with
+          <input name="phone" type="tel" required maxlength="20" autocomplete="tel">
+        </label>
+        <label>Your NIN or voter's card number
+          <input name="id" required maxlength="25" autocomplete="off">
+        </label>
+        <button class="btn" type="submit">Check status</button>
+      </form>
+      <p id="result" role="status"></p>
+
+      <form id="bank-form" hidden>
+        <h3>Where should we send your grant?</h3>
+        <label>Bank name <input name="bank" required maxlength="60"></label>
+        <label>Account number (10 digits)
+          <input name="acct_no" required inputmode="numeric" pattern="\d{10}" maxlength="10">
+        </label>
+        <label>Account name <input name="acct_name" required maxlength="100"></label>
+        <button class="btn" type="submit">Save bank details</button>
+        <p id="bank-msg" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="status.js"></script>
+</body>
+</html>

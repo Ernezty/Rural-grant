@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin - Rural Grants Nigeria</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <strong>Admin</strong>
+    <nav><a href="index.html">View site</a> <a href="#" id="logout" hidden>Log out</a></nav>
+  </header>
+
+  <main>
+    <section id="login-box">
+      <h2>Admin login</h2>
+      <form id="login-form">
+        <label>Email <input name="email" type="email" required autocomplete="username"></label>
+        <label>Password <input name="password" type="password" required autocomplete="current-password"></label>
+        <button class="btn" type="submit">Log in</button>
+        <p id="login-msg" role="status"></p>
+      </form>
+    </section>
+
+    <section id="dash" hidden>
+      <h2>Applications</h2>
+      <div class="tabs">
+        <button class="tab active" data-status="pending">Pending</button>
+        <button class="tab" data-status="accepted">Accepted</button>
+        <button class="tab" data-status="declined">Declined</button>
+      </div>
+      <p id="dash-msg" role="status"></p>
+      <div id="apps"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
