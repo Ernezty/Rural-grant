@@ -93,23 +93,79 @@ async function loadGrants() {
   render();
 }
 
+// Shrinks the photo to about 800px wide so it uploads fast on slow data.
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, 800 / img.width);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("compress failed"))), "image/jpeg", 0.8);
+    };
+    img.onerror = () => reject(new Error("not an image"));
+    img.src = url;
+  });
+}
+
 $("apply-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const msg = $("form-msg");
   const form = e.target;
-  const row = Object.fromEntries(new FormData(form));
+  const f = new FormData(form);
+
+  const idType = f.get("id_type");
+  const idNumber = String(f.get("id_number")).trim();
+  if (idType === "NIN" && !/^\d{11}$/.test(idNumber)) {
+    msg.textContent = "A NIN has exactly 11 digits.";
+    return;
+  }
+  if (idType === "Voters card" && !/^[A-Za-z0-9 ]{9,25}$/.test(idNumber)) {
+    msg.textContent = "Please check your voter's card number.";
+    return;
+  }
 
   if (!configured) {
     msg.textContent = "Demo mode: connect Supabase in app.js to save applications.";
     return;
   }
-  msg.textContent = "Sending...";
-  const { error } = await db.from("applications").insert(row);
-  if (error) {
-    msg.textContent = "Something went wrong. Please try again.";
-  } else {
+
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  msg.textContent = "Sending... please wait.";
+
+  try {
+    const photo = await compressImage(f.get("passport"));
+    const path = crypto.randomUUID() + ".jpg";
+    const up = await db.storage.from("passports").upload(path, photo, { contentType: "image/jpeg" });
+    if (up.error) throw up.error;
+
+    const row = {
+      full_name: f.get("full_name"),
+      phone: f.get("phone"),
+      email: f.get("email") || null,
+      state: f.get("state"),
+      lga: f.get("lga"),
+      grant_title: f.get("grant_title"),
+      message: f.get("message"),
+      id_type: idType,
+      id_number: idNumber,
+      passport_path: path,
+      consent: true
+    };
+    const { error } = await db.from("applications").insert(row);
+    if (error) throw error;
+
     msg.textContent = "Thank you! Your application has been received.";
     form.reset();
+  } catch (err) {
+    msg.textContent = "Something went wrong. Please check your details and try again.";
+  } finally {
+    button.disabled = false;
   }
 });
 
